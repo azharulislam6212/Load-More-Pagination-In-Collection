@@ -1,0 +1,50 @@
+
+              {% comment %} {%- render 'pagination', paginate: paginate, facet: true -%} {% endcomment %}
+
+              <div id="infinite-Pagination" class="infinite-Pagination" >
+                {%- assign paginate_checker = paginate.current_page | times: section.settings.products_per_page -%}
+                {%- if paginate.items > paginate_checker -%}
+                  {%- assign paginate_final = paginate_checker -%}
+                  {%- else -%}
+                  {%- assign paginate_final = paginate.items -%}
+                  {%- endif -%}
+
+                  {% assign count = paginate_final | times: 1.0 %}
+                  {% assign total = collection.all_products_count | times: 1.0 %}
+                
+                  {% assign percent = count | divided_by: total | times: 100 %}
+
+                  <div class="counter-progress">
+                    <span>Showing <span class="shoing_item">   {{ paginate_final }} </span> of <span class="total-item">{{collection.all_products_count}}</span> Items</span>
+
+                    <div class="progress">
+                      <div class="bar" style="width:{{percent}}%"> </div>
+                    </div>
+                  
+                  </div>
+
+                {% if paginate.next %}
+                <a href="{{ paginate.next.url }}" class="button">
+
+                 <span class="button btn-load-more"> Load more products</span>
+                
+                </a>
+                {% endif %}  
+            </div>
+
+{% if template contains 'collection'  %}
+  {{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}
+{% endif %}
+
+<script>
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var endlessScroll = new Ajaxinate({
+      container: '.product-list',
+      pagination: '.infinite-Pagination',
+      loadingText: "Load more products",
+      callback: true
+    });
+  });
+</script>
